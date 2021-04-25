@@ -7,16 +7,16 @@ import dimensions from "../../resources/dimensions";
 
 // MARK: Implementation
 const styles = StyleSheet.create({
-	contentContainer: {
-		display: 'flex',
-		alignItems: 'center',
-		height: "100%",
-		marginBottom: 32,
-		paddingBottom: 100
+	headerContainer: {
+		backgroundColor: colors.primary,
 	},
-	productItem: {
-	 
+	image: {
+	  height: 200,
+	  flex: 1
 	},
+	card: {
+      width: 190		
+	}
 });
 
 export default styles;
