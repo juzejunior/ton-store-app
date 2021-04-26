@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Button, Icon, Text, Content, List, ListItem, Left, Thumbnail, Body, Right } from 'native-base';
+import { Button, Icon, Text, ListItem, Left, Thumbnail, Body, Right } from 'native-base';
 import styles from './styles';
 
 interface IProps {
@@ -26,7 +26,7 @@ const CartItem = (
           <Text note>descricao do produto</Text>
         </Body>
         <Right>
-				  <Button onPress={() => {}} transparent>
+				  <Button onPress={onDeleteTap} transparent>
             <Icon name='trash' style={styles.trashIcon} />
           </Button>
         </Right>

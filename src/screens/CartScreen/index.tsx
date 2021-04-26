@@ -1,5 +1,12 @@
 // MARK: React
 import React from "react";
+import { connect } from 'react-redux';
+
+// MARK: Stores
+import * as CartActions from '../../stores/ducks/cart/actions';
+import { ApplicationState } from '../../stores';
+import { bindActionCreators, Dispatch } from 'redux';
+import { Product } from '../../stores/ducks/cart/types';
 
 // MARK: Components
 import { FlatList, SafeAreaView } from 'react-native';
@@ -26,15 +33,29 @@ const DATA = [
 	},
 ];
 
-const _renderCartItem = () => (
-	<CartItem 
-		title="ahora"
-		onDeleteTap={() => {}}
-	/>
-);
+interface StateProps {
+	cartItems: Product[]
+}
+  
+interface DispatchProps {
+  removeProduct(product: Product): void	
+}
+  
+type Props = StateProps & DispatchProps
 
-const Cart = () => {
+const Cart = (props : Props) => {
 	const navigation = useNavigation();
+
+	const _renderCartItem = (product: Product) => (
+		<CartItem 
+		    key={product.id}
+			title="ahora"
+			onDeleteTap={() => {
+				props.removeProduct(product);	
+			}}
+		/>
+	);
+
 	return (
 		<Container>
 			<AppBar 
@@ -45,13 +66,13 @@ const Cart = () => {
 			/>
 			<Content>
 				<ListItem>
-              		<Text>2 Produtos Adicionados</Text>
+              		<Text>{props.cartItems.length === 1 ? strings.addedProductsSingle : `${strings.formatString(strings.addedProductsPlural, props.cartItems.length)}`}</Text>
            		</ListItem>   	
 				<List>
 					{
-					  DATA.map((item) => {
+					  props.cartItems.map((item) => {
 						 return(
-							_renderCartItem() 
+							_renderCartItem(item) 
 						 ) 
 					  })	
 					}
@@ -61,4 +82,11 @@ const Cart = () => {
 	);
 }; 
 
-export default Cart;
+const mapStateToProps = (state: ApplicationState) => ({
+	cartItems: state.cart.data
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) =>  
+	bindActionCreators(CartActions, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

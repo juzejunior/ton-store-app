@@ -101,6 +101,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>  
-bindActionCreators(Object.assign({}, ProductsActions, CartActions), dispatch)
+	bindActionCreators(Object.assign({}, ProductsActions, CartActions), dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
