@@ -1,20 +1,13 @@
 // MARK: React
 import React from "react";
 
-// MARK: Mobx
-import { inject, observer } from "mobx-react";
-
 // MARK: Components
-import {
-	Button,
-	ScrollView,
-	StatusBar,
-	Text,
-	View,
-} from "react-native";
+import { FlatList, SafeAreaView } from 'react-native';
+import { Container, Button, Icon, Text, Content, List, ListItem, Left, Thumbnail, Body, Right } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
 
-// MARK: Stores
-import CountStore from "../../stores/CountStore";
+import AppBar from "../../components/AppBar";
+import CartItem from "../../components/CartItem";
 
 // MARK: Styles
 import styles from "./styles";
@@ -22,33 +15,50 @@ import styles from "./styles";
 // MARK: Resources
 import strings from "../../resources/strings";
 
-// MARK: Icons
-import StartAppLogo from "../../assets/startapp-logo.svg";
+const DATA = [
+	{
+	  id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+	  title: 'First Item',
+	},
+	{
+	  id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+	  title: 'Second Item',
+	},
+];
 
-// MARK: Implementation
-interface IProps {
-	countStore: CountStore;
-}
-
-const Home = ({ countStore }: IProps) => (
-	<>
-		<StatusBar barStyle="light-content" />
-		<ScrollView
-			style={styles.scrollView}
-			contentInsetAdjustmentBehavior="automatic"
-		>
-			<View style={styles.contentContainer}>
-				<StartAppLogo width={300} height={300} />
-				<Text style={styles.counterText}>
-					{countStore.count}
-				</Text>
-				<Button
-					title={strings.count}
-					onPress={countStore.incrementCount}
-				/>
-			</View>
-		</ScrollView>
-	</>
+const _renderCartItem = () => (
+	<CartItem 
+		title="ahora"
+		onDeleteTap={() => {}}
+	/>
 );
 
-export default inject("countStore")(observer(Home));
+const Cart = () => {
+	const navigation = useNavigation();
+	return (
+		<Container>
+			<AppBar 
+				title={strings.cartScreenTitle} 
+				cartEnable={true}
+				backButtonEnable={true}
+				onBackTap={()=> navigation.goBack()}
+			/>
+			<Content>
+				<ListItem>
+              		<Text>2 Produtos Adicionados</Text>
+           		</ListItem>   	
+				<List>
+					{
+					  DATA.map((item) => {
+						 return(
+							_renderCartItem() 
+						 ) 
+					  })	
+					}
+				</List>		
+			</Content>
+		</Container>
+	);
+}; 
+
+export default Cart;

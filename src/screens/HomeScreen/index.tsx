@@ -1,9 +1,6 @@
 // MARK: React
-import React from "react";
-
-// MARK: Mobx
-import { inject, observer } from "mobx-react";
-
+import React, { useEffect } from "react";
+import { connect } from 'react-redux';
 // MARK: Components
 import {
 	FlatList,
@@ -14,8 +11,14 @@ import {
 import AppBar from "../../components/AppBar";
 import ProductItem from "../../components/ProductItem";
 
+import { useNavigation } from '@react-navigation/native';
+
 // MARK: Stores
-import CountStore from "../../stores/CountStore";
+import { Product } from '../../stores/ducks/products/types';
+import * as ProductsActions from '../../stores/ducks/products/actions';
+import * as CartActions from '../../stores/ducks/cart/actions';
+import { ApplicationState } from '../../stores';
+import { bindActionCreators, Dispatch } from 'redux';
 
 // MARK: Styles
 import styles from "./styles";
@@ -25,72 +28,79 @@ import strings from "../../resources/strings";
 
 import { Container } from 'native-base';
 
+interface StateProps {
+  products: Product[]
+  loading: Boolean
+  cartItems: Product[]
+}
 
-const DATA = [
-	{
-	  id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-	  title: 'First Item',
-	},
-	{
-	  id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-	  title: 'Second Item',
-	},
-	{
-	  id: '58694a0f-3da1-471f-bd96-145571e29d72',
-	  title: 'Third Item',
-	},
-	{
-		id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-		title: 'Second Item1',
-	  },
-	  {
-		id: '58694a0f-3da1-471f-bd96-145571e29d726',
-		title: 'Third Item2',
-	  },
-	  {
-		id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f634',
-		title: 'Second Item3',
-	  },
-	  {
-		id: '58694a0f-3da1-471f-bd96-145571e29d7267',
-		title: 'Third Item5',
-	  },  
-];
+interface DispatchProps {
+  loadRequest(): void
+  addProduct(product: Product): void
+  removeProduct(product: Product): void	
+}
 
+type Props = StateProps & DispatchProps
 
-const renderProductItem = () => (
-	<View style={styles.productItem}>
-		<ProductItem 
-			title="ahora"
-			price={300}
-			onTap={() => {}}
-		/>
-	</View>
-);
 
 /*
 */
 // MARK: Implementation
-const Home = () => (
+const Home = (props : Props) => {
+   const { navigate } = useNavigation();
+
+   const _renderProductItem = (product: Product) => (
+		<View style={styles.productItem}>
+			<ProductItem 
+				description="ahora"
+				price={300}
+				onAddTap={() => props.addProduct(product)}
+				onRemoveTap={() => props.removeProduct(product)}
+				isInCart={props.cartItems.some(item => item.id === product.id)}
+			/>
+		</View>
+   );
+   
+   useEffect(() => {
+	props.loadRequest();
+   }, []);		
+
+   return (
 	<Container>
 		<AppBar 
 			title={strings.appName} 
 			cartEnable={true}
-			searchEnable={true}
+			cartItemCount={props.cartItems.length}
+			onCartTap={() => {
+				navigate('Cart');
+			}}
 		/>
-		<SafeAreaView style={ styles.contentContainer }>
-			<FlatList
-			    style={{paddingTop: 20, paddingBottom: 20}}		
-                data={DATA}
-                renderItem={renderProductItem}
-                numColumns={2}
-				keyExtractor={item => item.id}
-				showsVerticalScrollIndicator={false}
-  				showsHorizontalScrollIndicator={false}
-            /> 
-		</SafeAreaView>	
+		{
+		   !props.loading && props.products.length > 0 &&
+		   	<SafeAreaView style={ styles.contentContainer }>
+		   		<FlatList
+			   		style={{paddingTop: 20, paddingBottom: 20}}		
+			   		data={props.products}
+			   		renderItem={renderItem => _renderProductItem(renderItem.item)}
+			   		numColumns={2}
+			   		keyExtractor={item => item.id}
+			   		showsVerticalScrollIndicator={false}
+			   		showsHorizontalScrollIndicator={false}
+		   		/> 
+	   		</SafeAreaView>	
+		}
 	</Container>
-);
+   );
+};
 
+const mapStateToProps = (state: ApplicationState) => ({
+	products: state.products.data,
+	loading: state.products.loading,
+	error: state.products.error,
+	cartItems: state.cart.data
+});
 
-export default Home;
+const mapDispatchToProps = (dispatch: Dispatch) =>  
+bindActionCreators(Object.assign({}, ProductsActions, CartActions), dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

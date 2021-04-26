@@ -7,19 +7,9 @@ import dimensions from "../../resources/dimensions";
 
 // MARK: Implementation
 const styles = StyleSheet.create({
-	headerContainer: {
-		backgroundColor: colors.primary,
-	},
-	image: {
-	  height: 200,
-	  flex: 1
-	},
-	card: {
-      width: 190		
-	},
-	removeItem: {
-	  color: colors.support01			
-	}
+   trashIcon: {
+	  color: colors.support01 
+   }
 });
 
 export default styles;
