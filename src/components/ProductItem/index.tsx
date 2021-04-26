@@ -1,13 +1,15 @@
 import React from 'react';
 import { Image } from 'react-native';
-import { Card, CardItem, Content, Container, Text } from 'native-base';
+import { Card, CardItem, Text, Icon, Right, Button } from 'native-base';
 import styles from './styles';
 
 interface IProps {
   price: number;
   description: String;
   imageUrl?: String;
-  onTap: Function,
+  isInCart?: Boolean;
+  onAddTap: () => void,
+  onRemoveTap: () => void,
 }
 
 const ProductItem = (
@@ -15,7 +17,9 @@ const ProductItem = (
    description, 
    price,
    imageUrl,
-   onTap
+   isInCart = false,
+   onAddTap,
+   onRemoveTap
   }: IProps) => (
       <Card>
         <CardItem style={styles.card} cardBody>
@@ -33,6 +37,18 @@ const ProductItem = (
           <Text>
             Picolé na faixa
           </Text>
+          <Right>
+            {
+              !isInCart ?
+              <Button onPress={onAddTap} transparent>
+                <Icon name='add' />
+              </Button>
+              :
+              <Button onPress={onRemoveTap} transparent>
+                <Icon name='trash' style={styles.removeItem} />
+              </Button>
+            }
+          </Right>
         </CardItem>
       </Card>
 );

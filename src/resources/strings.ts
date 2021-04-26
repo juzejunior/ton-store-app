@@ -5,6 +5,7 @@ import LocalizedStrings from "localized-strings";
 const strings = new LocalizedStrings({
 	ptBR: {
 		appName: "Ton Store",
+		cartScreenTitle: "Carrinho",
 		count: "Contar",
 		error: {
 			default: "Houve um erro, tente novamente",
