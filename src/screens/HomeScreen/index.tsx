@@ -5,11 +5,15 @@ import { connect } from 'react-redux';
 import {
 	FlatList,
 	SafeAreaView,
-	View
+	View,
+	Alert,
+	ActivityIndicator
 } from "react-native";
 
 import AppBar from "../../components/AppBar";
 import ProductItem from "../../components/ProductItem";
+
+import Toast from 'react-native-toast-message';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -26,11 +30,13 @@ import styles from "./styles";
 // MARK: Resources
 import strings from "../../resources/strings";
 
-import { Container } from 'native-base';
+import { Container, Icon, Text } from 'native-base';
+import colors from "../../resources/colors";
 
 interface StateProps {
   products: Product[]
   loading: Boolean
+  error: Boolean
   cartItems: Product[]
 }
 
@@ -50,16 +56,37 @@ const Home = (props : Props) => {
    const { navigate } = useNavigation();
 
    const _renderProductItem = (product: Product) => (
-		<View style={styles.productItem}>
+		<View>
 			<ProductItem 
-				description="ahora"
-				price={300}
-				onAddTap={() => props.addProduct(product)}
-				onRemoveTap={() => props.removeProduct(product)}
+				description={product.name}
+				price={product.price}
+				imageUrl={product.url}
+				onAddTap={() => {
+					props.addProduct(product);
+					Toast.show({
+						text1: strings.itemAddInCart,
+						position: 'bottom',
+						type: 'success'
+				  });	
+				}}
+				onRemoveTap={() => confirmDeleteItem(product)}
 				isInCart={props.cartItems.some(item => item.id === product.id)}
 			/>
 		</View>
    );
+
+   const confirmDeleteItem = (product: Product) =>
+    Alert.alert(
+      strings.confirmDeleteItemInCart,
+      '',
+      [
+        {
+          text: strings.no,
+          style: "cancel"
+        },
+        { text: strings.yes, onPress: () => props.removeProduct(product) }
+      ]
+    );
    
    useEffect(() => {
 	props.loadRequest();
@@ -72,22 +99,43 @@ const Home = (props : Props) => {
 			cartEnable={true}
 			cartItemCount={props.cartItems.length}
 			onCartTap={() => {
-				navigate('Cart');
+				if (props.cartItems.length > 0) {
+					navigate('Cart');	
+				} else {
+					Toast.show({
+						text1: strings.noItemsInCartTitle,
+						text2: strings.noItemsInCartDescription,
+						position: 'bottom',
+						type: 'info'
+				  });	
+				}
 			}}
 		/>
 		{
-		   !props.loading && props.products.length > 0 &&
-		   	<SafeAreaView style={ styles.contentContainer }>
-		   		<FlatList
-			   		style={{paddingTop: 20, paddingBottom: 20}}		
-			   		data={props.products}
-			   		renderItem={renderItem => _renderProductItem(renderItem.item)}
-			   		numColumns={2}
-			   		keyExtractor={item => item.id}
-			   		showsVerticalScrollIndicator={false}
-			   		showsHorizontalScrollIndicator={false}
-		   		/> 
-	   		</SafeAreaView>	
+			props.loading &&
+				<View style={styles.centeredContainer}>
+				  <ActivityIndicator size="large" color={colors.primary} />		
+				</View> 
+		}
+		{
+			!props.loading && !props.error &&	   
+				<SafeAreaView style={ styles.contentContainer }>
+		   			<FlatList
+			   			data={props.products}
+			   			renderItem={renderItem => _renderProductItem(renderItem.item)}
+			   			numColumns={2}
+			   			keyExtractor={item => item.id}
+			   			showsVerticalScrollIndicator={false}
+			   			showsHorizontalScrollIndicator={false}
+		   			/> 
+	   			</SafeAreaView>   	
+		}
+		{
+			!props.loading && props.error &&
+				<View style={styles.centeredContainer}>
+					<Icon name='warning' />
+					<Text>{strings.problem}</Text>
+				</View>	
 		}
 	</Container>
    );

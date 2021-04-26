@@ -13,6 +13,9 @@ import store from '../stores';
 import HomeScreen from "../screens/HomeScreen";
 import CartScreen from "../screens/CartScreen";
 
+// MARK: Components
+import Toast from 'react-native-toast-message';
+
 // MARK: Implementation
 const Stack = createStackNavigator();
 
@@ -32,6 +35,7 @@ const App = () => (
 				/>
 			</Stack.Navigator>
 		</NavigationContainer>
+		<Toast ref={(ref) => Toast.setRef(ref)} />
 	</Provider>
 );
 

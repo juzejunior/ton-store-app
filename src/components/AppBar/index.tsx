@@ -1,6 +1,8 @@
 import React from 'react';
 import { Header, Left, Body, Right, Button, Icon, Title, Text, Badge } from 'native-base';
 import styles from './styles';
+import colors from "../../resources/colors";
+import { color } from 'react-native-reanimated';
 
 interface IProps {
 	title: String;
@@ -21,7 +23,7 @@ const AppBar = (
    onBackTap 
   }: IProps) => (
   <>
-     <Header style={styles.headerContainer}>
+     <Header androidStatusBarColor={colors.primaryDark} style={styles.headerContainer}>
           <Left>
             {
               backButtonEnable && 

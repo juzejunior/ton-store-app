@@ -12,6 +12,13 @@ const strings = new LocalizedStrings({
 		error: {
 			default: "Houve um erro, tente novamente",
 		},
+		noItemsInCartTitle: "Carrinho Vazio",
+		noItemsInCartDescription: "Adicione um item",
+		itemAddInCart: "Item adicionado ao carrinho",
+		confirmDeleteItemInCart: "Deseja remover este item do carrinho?",
+		yes: "Sim",
+		no: "Não",
+		problem: "Oops! Houve um problema por aqui"
 	},
 });
 

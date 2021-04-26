@@ -19,6 +19,9 @@ const styles = StyleSheet.create({
 	},
 	removeItem: {
 	  color: colors.support01			
+	},
+	price: {
+	  fontWeight: "bold"	
 	}
 });
 
