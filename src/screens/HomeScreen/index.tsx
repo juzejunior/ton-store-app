@@ -21,6 +21,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Product } from '../../stores/ducks/products/types';
 import * as ProductsActions from '../../stores/ducks/products/actions';
 import * as CartActions from '../../stores/ducks/cart/actions';
+import * as AppAnalyticsActions from '../../stores/ducks/appAnalytics/actions';
 import { ApplicationState } from '../../stores';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -43,7 +44,8 @@ interface StateProps {
 interface DispatchProps {
   loadRequest(): void
   addProduct(product: Product): void
-  removeProduct(product: Product): void	
+  removeProduct(product: Product): void
+  incrementAppAccessRequest() : void	
 }
 
 type Props = StateProps & DispatchProps
@@ -90,6 +92,7 @@ const Home = (props : Props) => {
    
    useEffect(() => {
 	props.loadRequest();
+	props.incrementAppAccessRequest();
    }, []);		
 
    return (
@@ -149,6 +152,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>  
-	bindActionCreators(Object.assign({}, ProductsActions, CartActions), dispatch)
+	bindActionCreators(Object.assign({}, ProductsActions, CartActions, AppAnalyticsActions), dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
