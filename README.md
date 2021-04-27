@@ -1,5 +1,5 @@
 <h1 align="center">Ton Store</h1>
-## Descrição do Projeto
+
 <p align="center">Projeto do Aplicativo Ton Store 🚀</p>
 
 <p align="center">
