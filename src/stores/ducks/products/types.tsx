@@ -13,7 +13,8 @@ export enum ProductsTypes {
 export interface Product {
     id: string
     name: string
-    price: number
+    price: number,
+    url: string
 }
 
 /**

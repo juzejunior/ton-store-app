@@ -1,32 +1,42 @@
 import React from 'react';
-import { Container, Button, Icon, Text, Content, List, ListItem, Left, Thumbnail, Body, Right } from 'native-base';
+import NumberFormat from 'react-number-format';
+import { Button, Icon, Text, ListItem, Left, Thumbnail, Body, Right } from 'native-base';
 import styles from './styles';
 
 interface IProps {
 	title: String;
+  price: number;
   description?: String;
-  imageUrl?: String;
+  imageUrl: String;
   onDeleteTap: () => void;
 }
 
 const CartItem = (
-  { 
-   title, 
-   description,
+  {  
+   title,
    imageUrl,
+   price,
    onDeleteTap 
   }: IProps) => (
   <>
      <ListItem avatar>
 				<Left>
-          <Thumbnail source={{ uri: 'https://media.gazetadopovo.com.br/bomgourmet/2018/09/picole-de-iogurte-e-framboesa-uniao-403c4410.png' }} />
+          <Thumbnail source={{ uri: imageUrl }} />
         </Left>
         <Body>
-          <Text>Sorvete X - R$ 9,99</Text>
-          <Text note>descricao do produto</Text>
+          <Text>{title}</Text>
+          <NumberFormat value={price / 100} 
+              displayType={'text'} 
+              prefix={'R$'}
+              fixedDecimalScale={true}
+              decimalScale={2}
+              decimalSeparator={","}
+              thousandSeparator={"."}	 
+              renderText={formattedValue => <Text style={styles.price}>{formattedValue}</Text>}
+            />
         </Body>
         <Right>
-				  <Button onPress={() => {}} transparent>
+				  <Button onPress={onDeleteTap} transparent>
             <Icon name='trash' style={styles.trashIcon} />
           </Button>
         </Right>

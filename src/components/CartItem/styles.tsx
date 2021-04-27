@@ -9,6 +9,9 @@ import dimensions from "../../resources/dimensions";
 const styles = StyleSheet.create({
    trashIcon: {
 	  color: colors.support01 
+   },
+   price: {
+     fontWeight: "bold"
    }
 });
 

@@ -11,11 +11,12 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		alignItems: 'center',
 		height: "100%",
-		marginBottom: 32,
-		paddingBottom: 100
+		paddingBottom: 80
 	},
-	productItem: {
-	 
+	centeredContainer: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center"	
 	},
 });
 

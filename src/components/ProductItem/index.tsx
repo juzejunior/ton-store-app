@@ -1,4 +1,5 @@
 import React from 'react';
+import NumberFormat from 'react-number-format';
 import { Image } from 'react-native';
 import { Card, CardItem, Text, Icon, Right, Button } from 'native-base';
 import styles from './styles';
@@ -6,7 +7,7 @@ import styles from './styles';
 interface IProps {
   price: number;
   description: String;
-  imageUrl?: String;
+  imageUrl: String;
   isInCart?: Boolean;
   onAddTap: () => void,
   onRemoveTap: () => void,
@@ -25,23 +26,29 @@ const ProductItem = (
         <CardItem style={styles.card} cardBody>
               <Image 
                 style={styles.image}
-                source={{uri: 'https://media.gazetadopovo.com.br/bomgourmet/2018/09/picole-de-iogurte-e-framboesa-uniao-403c4410.png'}} 
+                source={{uri: imageUrl }} 
               />
         </CardItem>
         <CardItem>
           <Text>
-            Picolé na faixa
+           { description }
           </Text>
         </CardItem>
         <CardItem>
-          <Text>
-            Picolé na faixa
-          </Text>
+            <NumberFormat value={price / 100} 
+              displayType={'text'} 
+              prefix={'R$'}
+              fixedDecimalScale={true}
+              decimalScale={2}
+              decimalSeparator={","}
+              thousandSeparator={"."}	 
+              renderText={formattedValue => <Text style={styles.price}>{formattedValue}</Text>}
+            />
           <Right>
             {
               !isInCart ?
               <Button onPress={onAddTap} transparent>
-                <Icon name='add' />
+               <Icon name='add' />
               </Button>
               :
               <Button onPress={onRemoveTap} transparent>
