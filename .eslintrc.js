@@ -17,5 +17,6 @@ module.exports = {
 		"react/jsx-indent-props": [2, "tab"],
 		"react/jsx-filename-extension": "off",
 		"react/prop-types": "off",
+		"eslint.enable": false
 	}
 };

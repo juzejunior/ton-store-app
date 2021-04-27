@@ -1,9 +1,6 @@
 // MARK: React
 import { Text, TextInput } from "react-native";
 
-// MARK: Mobx
-import "mobx-react-lite/batchingForReactNative";
-
 // MARK: Navigation
 import Routes from "./routes";
 import "react-native-gesture-handler";

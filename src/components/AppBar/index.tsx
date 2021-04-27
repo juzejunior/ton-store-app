@@ -1,27 +1,33 @@
 import React from 'react';
 import { Header, Left, Body, Right, Button, Icon, Title, Text, Badge } from 'native-base';
 import styles from './styles';
+import colors from "../../resources/colors";
+import { color } from 'react-native-reanimated';
 
 interface IProps {
 	title: String;
   backButtonEnable?: Boolean;
-  searchEnable?: Boolean;
   cartEnable?: Boolean;
+  cartItemCount?: number;
+  onCartTap?: () => void;
+  onBackTap?: () => void;
 }
 
 const AppBar = (
   { 
    title, 
    backButtonEnable = false,
-   searchEnable = false,
-   cartEnable = false 
+   cartEnable = false,
+   cartItemCount = 0,
+   onCartTap,
+   onBackTap 
   }: IProps) => (
   <>
-     <Header style={styles.headerContainer}>
+     <Header androidStatusBarColor={colors.primaryDark} style={styles.headerContainer}>
           <Left>
             {
               backButtonEnable && 
-              <Button transparent>
+              <Button onPress={onBackTap} transparent>
                 <Icon name='arrow-back' />
               </Button>
             }
@@ -31,17 +37,14 @@ const AppBar = (
           </Body>
           <Right>
           {
-            /*searchEnable && 
-            <Button transparent>
-              <Icon name='search' />
-            </Button>*/
-          }
-          {
             cartEnable &&
-            <Button badge vertical transparent>
-              <Badge style={ styles.cartBadge }>
-                <Text style={ styles.badgeText }>20</Text>
-              </Badge>
+            <Button onPress={onCartTap} badge vertical transparent>
+              {
+                cartItemCount > 0 && 
+                <Badge style={ styles.cartBadge }>
+                  <Text style={ styles.badgeText }>{cartItemCount.toString()}</Text>
+                </Badge>
+              }
               <Icon name="cart" />
             </Button>  
           }

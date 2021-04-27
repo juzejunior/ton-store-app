@@ -6,16 +6,21 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 // MARK: Stores
-import RootStore from "../stores/_RootStoreProvider";
+import { Provider } from 'react-redux';
+import store from '../stores';
 
 // MARK: Screens
 import HomeScreen from "../screens/HomeScreen";
+import CartScreen from "../screens/CartScreen";
+
+// MARK: Components
+import Toast from 'react-native-toast-message';
 
 // MARK: Implementation
 const Stack = createStackNavigator();
 
 const App = () => (
-	<RootStore>
+	<Provider store={store}>
 		<NavigationContainer>
 			<Stack.Navigator
 				headerMode="none"
@@ -24,9 +29,14 @@ const App = () => (
 					name="Home"
 					component={HomeScreen}
 				/>
+				<Stack.Screen
+					name="Cart"
+					component={CartScreen}
+				/>
 			</Stack.Navigator>
 		</NavigationContainer>
-	</RootStore>
+		<Toast ref={(ref) => Toast.setRef(ref)} />
+	</Provider>
 );
 
 export default App;
